@@ -1,0 +1,528 @@
+1.
+#include <iostream>
+using namespace std;
+ 
+int fun();
+ 
+int main(){
+        cout<<"fun() "<<fun()<<endl;
+        cout<<"fun() "<<fun()<<endl;
+        cout<<"fun() "<<fun()<<endl;
+        cout<<"fun() "<<fun()<<endl;
+}
+ 
+int fun(){
+        static int var = 10;
+        return var++;
+}
+
+
+
+2.
+
+#include <stdio.h>
+#include <string.h>
+ 
+ 
+int main(){
+        char str[]="One way of using a class is by creating objects and using the member through that object";
+        char *ptr=strtok(str, " ");//FIRST time giving address
+        while(ptr!=NULL){
+                printf("%s\n", ptr);
+                ptr = strtok(NULL, " ");//consecutive no address given
+        }
+}
+
+
+3.
+
+#include <iostream>
+using namespace std;
+ 
+class Base{
+public:
+        void funOne(){cout <<"Base::funOne()"<<endl;}
+        void funTwo(){cout <<"Base::funTwo()"<<endl;}
+};
+ 
+class Derived: public Base{
+public:
+        void funThree() {cout <<"Derived::funThree"<<endl; }
+        void funFour() {cout <<"Derived::funFour"<<endl; }
+};
+ 
+int main(){
+        Derived dObj;
+        dObj.funOne();
+        dObj.funTwo();
+        dObj.funThree();
+        dObj.funFour();
+}
+
+4.
+
+
+#include <iostream>
+using namespace std;
+ 
+struct A{
+        A(){cout<<"A()"<<endl; }
+        ~A(){cout<<"~A()"<<endl; }
+};
+ 
+struct B{
+        B(){cout<<"B()"<<endl; }
+        ~B(){cout<<"~B()"<<endl; }
+};
+ 
+struct C{
+        C(){cout<<"C()"<<endl; }
+        ~C(){cout<<"~C()"<<endl; }
+};
+ 
+struct D: A, B, C{
+        D():B(), C(), A(){cout<<"D()"<<endl; }
+        ~D(){cout<<"~D()"<<endl; }
+};
+ 
+int main(){
+        D dObj;
+}
+
+
+5.
+
+#include <iostream>
+
+using namespace std;
+ 
+class Test{
+
+//private member by default
+
+        void funOne(){cout <<"Test::funOne()--> Private"<<endl; }
+
+protected:
+
+        void funTwo(){cout <<"Test::funTwo() --> Protected"<<endl; }
+
+public:
+
+        void funThree(){cout <<"Test::funThree() --> Public"<<endl; }
+
+};
+ 
+class Derived: public Test{
+
+public:
+
+        void funFour(){
+
+                //funOne(); //private member
+
+                funTwo(); //protected member inherited here
+
+                funThree();//public member inherited here
+
+        }
+
+};
+ 
+int main(){
+
+        Derived dObj;
+
+        dObj.funThree();
+
+        dObj.funFour();
+
+}
+ 
+
+6.
+
+
+#include <iostream>
+using namespace std;
+ 
+class Base{
+public:
+        virtual void funOne(){cout <<"Base::funOne()"<<endl; }
+};
+ 
+class Derived: public Base{
+public:
+        void funOne() {cout<<"Derived::funOne()"<<endl;}
+};
+ 
+int main(){
+        //Remember Derived is a Base class
+        Base *ptr, bObj;
+        Derived dObj;
+ 
+        ptr = &bObj; //Base class object's address is assigned to Base class Pointer
+        ptr->funOne();
+ 
+        ptr = &dObj;//Derived class Object's address is assigned to Derived Class Pointer
+        ptr->funOne();
+}
+
+7.
+
+#include <iostream>
+using namespace std;
+ 
+class Test{
+        int data;
+public:
+        void funOne(int data){
+                this->data = data;
+                cout<<"funOne Data: "<<data<<endl;
+        }
+        void funTwo(){
+                cout<<"funTwo Data: "<<data<<endl;
+        }
+};
+ 
+int main(){
+        Test obj;
+        obj.funOne(10);
+        obj.funTwo();
+}
+
+8.
+
+#include <iostream>
+using namespace std;
+ 
+class Test{
+public:
+        Test& funOne(){
+                cout<<"in funOne "<<this<<endl;
+                return *this;
+        }
+        void funTwo(){
+                cout<<"in funTwo"<<endl;
+        }
+};
+ 
+int main(){
+        Test objOne;
+        objOne.funOne().funTwo();
+}
+
+
+9.
+
+. Are we overloading as member or non-member function(global friend)
+			2. Is it Unary or Binary operator 
+			3. If Unary and it is a member function, then no argument is necessary.
+			If Unary and it is a Non-member function, then one argument is necessary.
+			4. If operator is Binary and it is used as a member function then one argument is necessary.
+			If overloaded as non-member then both the arguments are to be passed.
+
+10.
+
+#include <iostream>
+using namespace std;
+ 
+class Num{
+        int data;
+public:
+        Num(int x=0): data(x) {}
+        Num& operator++(){
+                data++;
+                return *this;
+        }
+ 
+        void disp(ostream &out){
+                out<<"data: "<<data<<endl;
+        }
+};
+ 
+int main(){
+        Num a = 10;
+        ++a;
+        a.disp(cout);
+        ++a;
+        a.disp(cout);
+}
+
+
+
+11.
+
+#include <iostream>
+
+using namespace std;
+ 
+class Num{
+
+        int data;
+
+public:
+
+        Num(int x=0): data(x) {}
+
+        Num& operator++(){
+
+                cout<<"Pre-fix"<<endl;
+
+                data++;
+
+                return *this;
+
+        }
+
+        Num operator++(int){
+
+                cout<<"Post-fix"<<endl;
+
+                Num temp(*this);//store previous data here
+
+                data++;
+
+                return temp; //return non-modified data
+
+        }
+ 
+        void disp(ostream &out){
+
+                out<<"data: "<<data<<endl;
+
+        }
+
+};
+ 
+int main(){
+
+        Num a = 10;
+
+        ++a;
+
+        a.disp(cout);
+
+        a++;
+
+        a.disp(cout);
+
+}
+ 
+
+12.
+
+#include <iostream>
+using namespace std;
+ 
+class Num{
+        int data;
+public:
+        Num(int x=0): data(x) {}
+        Num operator+(const Num& rhs){
+                Num temp(data + rhs.data);
+                return temp;
+        }
+ 
+        Num operator-(const Num& rhs){
+                Num temp(data - rhs.data);
+                return temp;
+        }
+        void disp(ostream &out){
+                out<<"data: "<<data<<endl;
+        }
+};
+ 
+int main(){
+        Num a = 100, b = 20;
+        a.disp(cout);
+        b.disp(cout);
+        Num c = a + b;
+        Num d = c + a - b;
+        c.disp(cout);
+        d.disp(cout);
+}
+
+
+13.
+
+#include <iostream>
+using namespace std;
+ 
+class Num{
+        int data;
+public:
+        Num(int x=0): data(x) {}
+        Num operator+(const Num& rhs){
+                Num temp(data + rhs.data);
+                return temp;
+        }
+ 
+        Num operator-(const Num& rhs){
+                Num temp(data - rhs.data);
+                return temp;
+        }
+        friend ostream& operator<<(ostream &, const Num &);
+};
+ 
+ostream& operator<<(ostream &out, const Num &obj){
+        out<<"data: "<<obj.data;
+        return out;
+}
+ 
+int main(){
+        Num a = 100, b = 20;
+        cout<<a<<"   "<<b<<endl;
+        Num c = a + b;
+        Num d = c + a - b;
+        cout<<c<<"   "<<d<<endl;
+}
+
+
+
+14.
+
+#include <iostream>
+using namespace std;
+ 
+class Num{
+        int data;
+public:
+        Num(int x=0): data(x) {}
+        friend Num operator+(const Num&, const Num&);
+        friend Num operator-(const Num&, const Num&);
+        friend ostream& operator<<(ostream &, const Num &);
+};
+ 
+Num operator+(const Num& lhs, const Num& rhs){
+        Num temp(lhs.data + rhs.data);
+        return temp;
+}
+ 
+Num operator-(const Num& lhs, const Num& rhs){
+        Num temp(lhs.data - rhs.data);
+        return temp;
+}
+ 
+ostream& operator<<(ostream &out, const Num &obj){
+        out<<"data: "<<obj.data;
+        return out;
+}
+ 
+int main(){
+        Num a = 100, b = 20;
+        cout<<a<<"   "<<b<<endl;
+        Num c = a + b;
+        Num d = c + a - b;
+        cout<<c<<"   "<<d<<endl;
+}
+
+
+15.
+
+#include <iostream>
+
+#include <cstdlib>
+
+using namespace std;
+ 
+void * operator new(size_t size){
+
+        cout<<"Global operator new with size: "<<size<<endl;
+
+        void *ptr = malloc(size);
+
+        if (ptr == NULL){
+
+                throw bad_alloc();
+
+        }
+
+        return ptr;
+
+}
+ 
+void operator delete(void *ptr){
+
+        cout<<"Global operator delete"<<endl;
+
+        free(ptr);
+
+}
+ 
+struct Test{
+
+        int data;
+
+        Test(int x=0):data(x){cout<<"Test()"<<endl;}
+
+        ~Test(){cout<<"~Test()"<<endl;}
+
+};
+ 
+int main(){
+
+        Test *ptr = new Test();
+
+        delete ptr;
+
+}
+
+
+16.
+
+#include <iostream>
+
+#include <cstdlib>
+
+using namespace std;
+ 
+class Test{
+
+        int data;
+
+public:
+
+        Test(int x=0): data(x) {}
+ 
+        void *operator new(size_t size){
+
+                cout<<"Test::operator new size: "<<size<<endl;
+
+                void *ptr = malloc(size);
+
+                if (ptr == NULL)
+
+                        throw bad_alloc();
+
+                return ptr;
+
+        }
+ 
+        void operator delete(void *ptr){
+
+                cout<<"Test::operator delete "<<endl;
+
+                free(ptr);
+
+        }
+
+};
+ 
+int main(){
+
+        Test *ptr = new Test(100);
+
+        delete ptr;
+
+}
+ 
+ 
+
+
+
+
+
+
+
+
+
